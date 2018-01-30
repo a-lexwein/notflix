@@ -1,0 +1,31 @@
+{
+  "name": "notflix",
+  "version": "1.0.0",
+  "description": "Movie Browsing and Reccomendation Engine",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-lexwein/notflix.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/a-lexwein/notflix/issues"
+  },
+  "homepage": "https://github.com/a-lexwein/notflix#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.6.1",
+    "mocha": "^5.0.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.188.0"
+  }
+}
