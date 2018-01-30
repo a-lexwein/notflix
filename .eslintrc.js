@@ -6,8 +6,8 @@ module.exports = {
     //     "react/prefer-stateless-function": "off",
     //     "no-plusplus": "off",
     // }
+    "env": {
+        "mocha": true,
+        "node": true,
+    },
 };
-
-env:
-  node: true
-  mocha: true
