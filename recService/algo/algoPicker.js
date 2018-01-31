@@ -1,3 +1,5 @@
+// Function that takes randomly picks a version of algorithm to generate list of indices.
+// list of indices are used to pull movie_id's from sorted db table.
 const weightedRandomInt = require('./weightedRandomInt');
 
 const algos = [
