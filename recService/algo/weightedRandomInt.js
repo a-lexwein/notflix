@@ -11,17 +11,3 @@ const weightedRandomInt = (n, exp = 1) => {
 
 
 module.exports = weightedRandomInt;
-
-// tests
-// do it 100 times with exp
-
-// edge cases
-// n = 0
-// n < 0
-// exp < 0
-// exp = 0
-
-// make x large
-
-// let n = 1000
-// let exp = 5
