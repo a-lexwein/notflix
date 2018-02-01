@@ -8,7 +8,7 @@
 // message is a stringified list of integers
 // attributes: user_id, algo_id
 const AWS = require('aws-sdk');
-const { getMoviesByIndex } = require('./../database/index.js');
+const { getMoviesByIndex, getMovieCount } = require('./../database/index.js');
 
 AWS.config.update({ region: 'us-west-2' });
 
@@ -17,7 +17,11 @@ const algoPicker = require('./../algo/algoPicker');
 const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 const queueURL = 'https://sqs.us-west-2.amazonaws.com/521939927944/notflixRecs';
 
-const movieCount = 1000; // once db is set up, get movieCount from there.
+// const movieCount = 1000; // once db is set up, get movieCount from there.
+let movieCount;
+getMovieCount().then((data) => {
+  movieCount = data;
+});
 const numRecs = 50;
 
 const params = {

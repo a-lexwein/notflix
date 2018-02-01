@@ -26,6 +26,23 @@ const getMoviesByIndex = async (rows) => {
   return x;
 };
 
+const getMovieCount = async () => {
+  const query = `
+  SELECT count(1) as cnt FROM model_naive;
+  `;
+  let x;
+  try {
+    x = await client.query(query);
+    x = x.rows[0].cnt;
+  } catch (err) {
+    console.log(err);
+  }
+  return x;
+};
+
+getMovieCount().then(console.log);
+
 module.exports = {
   getMoviesByIndex,
+  getMovieCount,
 };
