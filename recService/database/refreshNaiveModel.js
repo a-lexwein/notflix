@@ -11,12 +11,15 @@ client.connect();
 const query = `
 truncate model_naive;
 INSERT INTO model_naive
-  SELECT
-    movie_id,
-    sum(signal) as watch_count
-  FROM history
-  GROUP BY movie_id
-  ORDER BY watch_count DESC;
+  SELECT *,
+    row_number () OVER () as row_number
+    FROM
+    (SELECT
+      movie_id,
+      sum(signal) as watch_count
+    FROM history
+    GROUP BY movie_id
+    ORDER BY watch_count DESC) a;
 `;
 
 client.query(query, (err, res) => {

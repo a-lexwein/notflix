@@ -7,12 +7,15 @@ CREATE TABLE history (
 );
 
 CREATE TABLE model_naive AS
-  SELECT
+SELECT *,
+  row_number () OVER () as row_number
+  FROM
+  (SELECT
     movie_id,
     sum(signal) as watch_count
   FROM history
   GROUP BY movie_id
-  ORDER BY watch_count DESC;
+  ORDER BY watch_count DESC) a;
 
 ALTER TABLE model_naive
-  ADD PRIMARY KEY (movie_id);
+  ADD PRIMARY KEY (row_number);
