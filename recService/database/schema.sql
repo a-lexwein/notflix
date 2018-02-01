@@ -8,7 +8,7 @@ CREATE TABLE history (
 
 CREATE TABLE model_naive AS
 SELECT *,
-  row_number () OVER () as row_number
+  row_number () OVER () - 1 as row_number
   FROM
   (SELECT
     movie_id,

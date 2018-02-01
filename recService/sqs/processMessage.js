@@ -61,7 +61,7 @@ sqs.receiveMessage(params, async (err, data) => {
     };
 
     sqs.deleteMessage(deleteParams, (errD, dataD) => {
-      if (err) {
+      if (errD) {
         console.log('Delete Error', errD);
       } else {
         console.log('Message Deleted', dataD);

@@ -9,20 +9,6 @@ const client = new Client({
 
 client.connect();
 
-// const getMoviesByIndex = (ids, cb) => {
-//   const idsString = ids.join(',');
-//   const query = `
-//   SELECT movie_id
-//   FROM model_naive
-//   WHERE row_number in (${idsString})
-//   `;
-//
-//   client.query(query, (err, res) => {
-//     if (err) console.log(err);
-//     cb(res.rows || null);
-//   });
-// };
-
 const getMoviesByIndex = async (rows) => {
   const rowsString = rows.join(',');
   const query = `
