@@ -8,6 +8,7 @@
 // message is a stringified list of integers
 // attributes: user_id, algo_id
 const AWS = require('aws-sdk');
+const { getMoviesByIndex } = require('./../database/index.js');
 
 AWS.config.update({ region: 'us-west-2' });
 
@@ -16,7 +17,7 @@ const algoPicker = require('./../algo/algoPicker');
 const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 const queueURL = 'https://sqs.us-west-2.amazonaws.com/521939927944/notflixRecs';
 
-const movieCount = 100; // once db is set up, get movieCount from there.
+const movieCount = 1000; // once db is set up, get movieCount from there.
 const numRecs = 50;
 
 const params = {
@@ -42,6 +43,7 @@ sqs.receiveMessage(params, (err, data) => {
     };
     const userId = data.Messages[0].MessageAttributes.userID.StringValue;
     const algoPicks = algoPicker(movieCount, numRecs);
+    const movieIds = getMoviesByIndex(algoPicks.recs);
     const outParams = {
       DelaySeconds: 1,
       MessageAttributes: {
@@ -54,7 +56,7 @@ sqs.receiveMessage(params, (err, data) => {
           StringValue: algoPicks.algoIndex.toString(),
         },
       },
-      MessageBody: JSON.stringify(algoPicks.recs),
+      MessageBody: JSON.stringify(movieIds),
       QueueUrl: `${queueURL}Outbox`,
     };
 
