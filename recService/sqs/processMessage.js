@@ -33,7 +33,7 @@ const params = {
   WaitTimeSeconds: 0,
 };
 
-sqs.receiveMessage(params, (err, data) => {
+sqs.receiveMessage(params, async (err, data) => {
   if (err) {
     console.log('Receive Error', err);
   } else if (data.Messages) {
@@ -43,7 +43,7 @@ sqs.receiveMessage(params, (err, data) => {
     };
     const userId = data.Messages[0].MessageAttributes.userID.StringValue;
     const algoPicks = algoPicker(movieCount, numRecs);
-    const movieIds = getMoviesByIndex(algoPicks.recs);
+    const movieIds = await getMoviesByIndex(algoPicks.recs);
     const outParams = {
       DelaySeconds: 1,
       MessageAttributes: {
