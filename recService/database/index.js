@@ -16,6 +16,7 @@ const getMoviesByIndex = async (rows) => {
   FROM model_naive
   WHERE row_number in (${rowsString})
   `;
+  console.log(query);
   let x;
   try {
     x = await client.query(query);
@@ -27,9 +28,7 @@ const getMoviesByIndex = async (rows) => {
 };
 
 const getMovieCount = async () => {
-  const query = `
-  SELECT count(1) as cnt FROM model_naive;
-  `;
+  const query = 'SELECT count(1) as cnt FROM model_naive;';
   let x;
   try {
     x = await client.query(query);
@@ -46,3 +45,6 @@ module.exports = {
   getMoviesByIndex,
   getMovieCount,
 };
+
+
+const now =  new Date();
