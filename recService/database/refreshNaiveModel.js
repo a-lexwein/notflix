@@ -22,7 +22,9 @@ INSERT INTO model_naive
     ORDER BY watch_count DESC) a;
 `;
 
-client.query(query, (err, res) => {
+const refresh = () => client.query(query, (err, res) => {
   console.log(err, res);
   client.end();
 });
+
+module.exports = refresh;
