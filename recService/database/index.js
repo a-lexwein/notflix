@@ -47,7 +47,6 @@ const insertIntoHistory = async ({
   INSERT INTO history (user_id, movie_id, signal, watched_timestamp)
     VALUES (${user_id}, ${movie_id}, ${signal}, '${timestamp}');
   `;
-  console.log(query);
   try {
     await client.query(query);
   } catch (err) {
