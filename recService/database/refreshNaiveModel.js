@@ -24,7 +24,8 @@ INSERT INTO model_naive
 
 const refresh = () => client.query(query, (err, res) => {
   console.log(err, res);
-  client.end();
 });
+
+// TODO: handle client.end() properly.
 
 module.exports = refresh;
