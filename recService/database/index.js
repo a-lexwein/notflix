@@ -1,3 +1,5 @@
+/* eslint camelcase: "off" */
+
 const { Client } = require('pg');
 const { pluck } = require('underscore');
 
@@ -16,7 +18,6 @@ const getMoviesByIndex = async (rows) => {
   FROM model_naive
   WHERE row_number in (${rowsString})
   `;
-  console.log(query);
   let x;
   try {
     x = await client.query(query);
@@ -39,12 +40,23 @@ const getMovieCount = async () => {
   return x;
 };
 
-getMovieCount().then(console.log);
+const insertIntoHistory = async ({
+  movie_id, user_id, signal, timestamp,
+}) => {
+  const query = `
+  INSERT INTO history (user_id, movie_id, signal, watched_timestamp)
+    VALUES (${user_id}, ${movie_id}, ${signal}, '${timestamp}');
+  `;
+  console.log(query);
+  try {
+    await client.query(query);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 module.exports = {
   getMoviesByIndex,
   getMovieCount,
+  insertIntoHistory,
 };
-
-
-const now =  new Date();

@@ -1,24 +1,32 @@
-// sqsDummySend.js
+/* eslint camelcase: "off" */
 const AWS = require('aws-sdk');
-const weightedRandomInt = require('./../algo/weightedRandomInt');
 // Set the region
 AWS.config.update({ region: 'us-west-2' });
-const url = 'https://sqs.us-west-2.amazonaws.com/521939927944/notflixRecsInbox';
+const QueueUrl = 'https://sqs.us-west-2.amazonaws.com/521939927944/notflixRecsEvents';
 // Create an SQS service object
 const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 
 const sendRand = () => {
+  const body = [];
+
+  for (let i = 0; i < 20; i += 1) {
+    const user_id = Math.floor(Math.random() * 100000);
+    const movie_id = Math.floor(Math.random() * 3000);
+    const event = { user_id, movie_id, signal: 1 };
+    body.push(event);
+  }
   const params = {
     DelaySeconds: 1,
     MessageAttributes: {
-      userID: {
-        DataType: 'Number',
-        StringValue: weightedRandomInt(1000, 1).toString(),
+      completions: {
+        DataType: 'String',
+        StringValue: JSON.stringify(body),
       },
     },
-    MessageBody: 'Next Message',
-    QueueUrl: url,
+    MessageBody: 'Latest user completions',
+    QueueUrl,
   };
+
   sqs.sendMessage(params, (err, data) => {
     if (err) {
       console.log('Error', err);
@@ -27,11 +35,9 @@ const sendRand = () => {
     }
   });
 };
-// send 200 random messages;
-let i = 0;
-while (i < 100) {
+// send some random messages;
+for (let i = 0; i < 20; i += 1) {
   sendRand();
-  i += 1;
 }
 
 // const params = {
