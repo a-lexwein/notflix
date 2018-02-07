@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 
 const algoPicker = require('./../algo/algoPicker');
-const { getMoviesByIndex, getMovieCount } = require('./../database/index.js');
+const { getMoviesByIndex, getUsersMoviesByIndex, getMovieCount } = require('./../database/index.js');
 
 AWS.config.update({ region: 'us-west-2' });
 
@@ -9,6 +9,8 @@ let movieCount;
 getMovieCount().then((data) => {
   movieCount = data;
 });
+
+movieCount = 100;
 const numRecs = 50;
 
 
@@ -19,7 +21,12 @@ const handleMessage = async (message, done) => {
   // do some work with `message`
   const userId = message.MessageAttributes.userID.StringValue;
   const algoPicks = algoPicker(movieCount, numRecs);
-  const movieIds = await getMoviesByIndex(algoPicks.recs);
+  let movieIds = [];
+  if (algoPicks.algoIndex === 2) {
+    movieIds = await getUsersMoviesByIndex(algoPicks.recs, userId);
+  } else {
+    movieIds = await getMoviesByIndex(algoPicks.recs);
+  }
   const outParams = {
     DelaySeconds: 1,
     MessageAttributes: {

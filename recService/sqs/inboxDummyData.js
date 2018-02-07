@@ -29,7 +29,7 @@ const sendRand = () => {
 };
 // send 200 random messages;
 let i = 0;
-while (i < 100) {
+while (i < 150) {
   sendRand();
   i += 1;
 }

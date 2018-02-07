@@ -5,6 +5,7 @@ const weightedRandomInt = require('./weightedRandomInt');
 const algos = [
   n => weightedRandomInt(n, 1),
   n => weightedRandomInt(n, 3),
+  n => weightedRandomInt(n, 3),
 ];
 
 

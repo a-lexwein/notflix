@@ -28,6 +28,24 @@ const getMoviesByIndex = async (rows) => {
   return x;
 };
 
+const getUsersMoviesByIndex = async (rows, userID) => {
+  const rowsString = rows.join(',');
+  const query = `
+  SELECT movie_id
+  FROM model_cf
+  WHERE user_rank in (${rowsString})
+    AND user_id = ${userID};
+  `;
+  let x;
+  try {
+    x = await client.query(query);
+    x = pluck(x.rows, 'movie_id');
+  } catch (err) {
+    console.log(err);
+  }
+  return x;
+};
+
 const getMovieCount = async () => {
   const query = 'SELECT count(1) as cnt FROM model_naive;';
   let x;
@@ -56,6 +74,7 @@ const insertIntoHistory = async ({
 
 module.exports = {
   getMoviesByIndex,
+  getUsersMoviesByIndex,
   getMovieCount,
   insertIntoHistory,
 };
