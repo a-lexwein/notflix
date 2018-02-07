@@ -26,6 +26,9 @@
     "mocha": "^5.0.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.188.0"
+    "aws-sdk": "^2.188.0",
+    "pg": "^7.4.1",
+    "sqs-consumer": "^3.8.0",
+    "underscore": "^1.8.3"
   }
 }
