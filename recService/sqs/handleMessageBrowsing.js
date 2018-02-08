@@ -6,16 +6,16 @@ const AWS = require('aws-sdk');
 AWS.config.update({ region: 'us-west-2' });
 
 let movieCount;
-getMovieCount().then((data) => {
-  movieCount = data;
-});
+// getMovieCount().then((data) => {
+//   movieCount = data;
+// });
 
 movieCount = 100;
 const numRecs = 50;
 
 
 const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
-const queueURL = 'https://sqs.us-west-2.amazonaws.com/361004913048/job_queue';
+const queueURL = 'https://sqs.us-west-2.amazonaws.com/521939927944/notflixRecs';
 
 const handleMessage = async (message, done) => {
   // do some work with `message`
