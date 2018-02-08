@@ -1,3 +1,5 @@
+start_time <- Sys.time()
+
 library(dplyr)
 library(tidyr)
 library(RPostgreSQL)
@@ -19,7 +21,7 @@ history_db <- tbl(con, "history")
 hist <- history_db %>%
   select(user_id, movie_id, signal) %>%
   distinct() %>%
-  filter(movie_id < 100) %>%
+  filter(movie_id < 1000) %>%
   collect()
 
 # convert to wide for matrix-ing
@@ -32,6 +34,9 @@ mat <- users %>%
   select(-user_id) %>%
   data.matrix() %>%
   cosine()
+
+cosine_done_time <- Sys.time()
+cosine_done_time - start_time
 
 
 # user_row <- users[25,]
@@ -51,6 +56,7 @@ get_user_cosines <- function(user_row) {
   c(user_id = user_id, apply(mat, FUN= cos1, MARGIN = 1))
 }
 
+
 ## applies get_user_cosine to every user, and dplyr's it into tidy form
 model_cf <- by_row(users, get_user_cosines, .collate = "cols") %>%
   select(user_id, starts_with('.out'), -.out1) %>%
@@ -60,9 +66,14 @@ model_cf <- by_row(users, get_user_cosines, .collate = "cols") %>%
   group_by(user_id) %>%
   mutate(user_rank = row_number())
 
+model_done_time <- Sys.time()
+model_done_time - cosine_done_time
+
 ## overwrites model in database
 dbWriteTable(con, "model_cf", model_cf, overwrite = TRUE, row.names = FALSE)
 
+db_upload_time < Sys.time()
 
 
+end_time <- Sys.time()
 #hist %>% filter(user_id == 5) %>% View

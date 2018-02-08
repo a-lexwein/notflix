@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.188.0",
+    "newrelic": "^2.7.0",
     "pg": "^7.4.1",
     "sqs-consumer": "^3.8.0",
     "underscore": "^1.8.3"

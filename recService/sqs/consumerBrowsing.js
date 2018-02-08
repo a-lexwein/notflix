@@ -1,7 +1,12 @@
 const Consumer = require('sqs-consumer');
 const AWS = require('aws-sdk');
 
-const handleMessage = require('./handleMessageBrowsing');
+// const handleMessage = require('./handleMessageBrowsing');
+
+const handleMessage = (message, done) => {
+  console.log('hello world');
+  done();
+};
 
 AWS.config.update({ region: 'us-west-2' });
 const queueURL = 'https://sqs.us-west-2.amazonaws.com/521939927944/notflixRecs';
