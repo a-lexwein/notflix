@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 
-const algoPicker = require('./../algo/algoPicker');
-const { getMoviesByIndex, getUsersMoviesByIndex, getMovieCount } = require('./../database/index.js');
+// const algoPicker = require('./../algo/algoPicker');
+// const { getMoviesByIndex, getUsersMoviesByIndex, getMovieCount } = require('./../database/index.js');
 
 AWS.config.update({ region: 'us-west-2' });
 
@@ -15,18 +15,18 @@ const numRecs = 50;
 
 
 const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
-const queueURL = 'https://sqs.us-west-2.amazonaws.com/521939927944/notflixRecs';
+const queueURL = 'https://sqs.us-west-2.amazonaws.com/361004913048/job_queue';
 
 const handleMessage = async (message, done) => {
   // do some work with `message`
   const userId = message.MessageAttributes.userID.StringValue;
-  const algoPicks = algoPicker(movieCount, numRecs);
-  let movieIds = [];
-  if (algoPicks.algoIndex === 2) {
-    movieIds = await getUsersMoviesByIndex(algoPicks.recs, userId);
-  } else {
-    movieIds = await getMoviesByIndex(algoPicks.recs);
-  }
+  // const algoPicks = algoPicker(movieCount, numRecs);
+  let movieIds = [1,2,3];
+  // if (algoPicks.algoIndex === 2) {
+  //   movieIds = await getUsersMoviesByIndex(algoPicks.recs, userId);
+  // } else {
+  //   movieIds = await getMoviesByIndex(algoPicks.recs);
+  // }
   const outParams = {
     DelaySeconds: 1,
     MessageAttributes: {
@@ -36,7 +36,7 @@ const handleMessage = async (message, done) => {
       },
       algoID: {
         DataType: 'Number',
-        StringValue: algoPicks.algoIndex.toString(),
+        StringValue: '1',
       },
     },
     MessageBody: JSON.stringify(movieIds),
