@@ -18,15 +18,18 @@
   "homepage": "https://github.com/a-lexwein/notflix#readme",
   "devDependencies": {
     "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
     "eslint": "^4.16.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.6.1",
-    "mocha": "^5.0.0"
+    "mocha": "^5.0.0",
+    "mocha-lcov-reporter": "^1.3.0"
   },
   "dependencies": {
     "aws-sdk": "^2.188.0",
+    "fs": "0.0.1-security",
     "pg": "^7.4.1",
     "sqs-consumer": "^3.8.0",
     "underscore": "^1.8.3"
