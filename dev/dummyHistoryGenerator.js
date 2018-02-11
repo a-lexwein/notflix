@@ -7,9 +7,17 @@
 // but I actually tweaked the generation a little, so db won't fully match distribution from script.
 const { Client } = require('pg');
 
+// const client = new Client({
+//   host: 'localhost',
+//   database: 'recs',
+//   port: 5432,
+// });
+
 const client = new Client({
-  host: 'localhost',
-  database: 'recs',
+  host: 'ec2-52-38-112-13.us-west-2.compute.amazonaws.com',
+  user: 'power_user',
+  password: '123',
+  database: 'postgres',
   port: 5432,
 });
 

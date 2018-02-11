@@ -6,9 +6,9 @@ library(purrrlyr)
 library(stringr)
 
 con <- DBI::dbConnect(RPostgreSQL::PostgreSQL(), 
-                      dbname = 'recs',
-                      host = "localhost",
-                      port = 5432
+  dbname = 'recs',
+  host = "localhost",
+  port = 5432
 )
 
 # pointer to history table
@@ -33,14 +33,6 @@ mat <- users %>%
   data.matrix() %>%
   cosine()
 
-
-# user_row <- users[25,]
-# user_row <- select(user_row, -user_id) %>% select(1:100) %>% as.numeric
-# movie_row <-mat[100,][1:100] 
-# 
-# cosine(user_row, movie_row)
-
-
 ## function to compute every record.
 get_user_cosines <- function(user_row) {
   user_id = getElement(user_row, 'user_id')
@@ -62,7 +54,3 @@ model_cf <- by_row(users, get_user_cosines, .collate = "cols") %>%
 
 ## overwrites model in database
 dbWriteTable(con, "model_cf", model_cf, overwrite = TRUE, row.names = FALSE)
-
-
-
-#hist %>% filter(user_id == 5) %>% View

@@ -11,7 +11,13 @@ const client = new Client({
 
 client.connect();
 
-const getMoviesByIndex = async (rows) => {
+const getMoviesByIndex = async (rowsIn) => {
+  const rows = rowsIn
+    .filter(x => typeof x === 'number' && Math.floor(x) === x);
+  if (rows.length === 0) {
+    return [];
+  }
+
   const rowsString = rows.join(',');
   const query = `
   SELECT movie_id
@@ -55,7 +61,7 @@ const getMovieCount = async () => {
   } catch (err) {
     console.log(err);
   }
-  return x;
+  return Number(x);
 };
 
 const insertIntoHistory = async ({
@@ -65,6 +71,7 @@ const insertIntoHistory = async ({
   INSERT INTO history (user_id, movie_id, signal, watched_timestamp)
     VALUES (${user_id}, ${movie_id}, ${signal}, '${timestamp}');
   `;
+  console.log(query);
   try {
     await client.query(query);
   } catch (err) {
@@ -77,4 +84,5 @@ module.exports = {
   getUsersMoviesByIndex,
   getMovieCount,
   insertIntoHistory,
+  client,
 };

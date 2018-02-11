@@ -2,7 +2,6 @@ const { expect } = require('chai');
 const weightedRandomInt = require('./../recService/algo/weightedRandomInt.js');
 const algoPicker = require('./../recService/algo/algoPicker.js');
 
-
 describe('weightedRandomInt', () => {
   it('should return 0 when n = 1', () => {
     const x = weightedRandomInt(1);
@@ -36,7 +35,6 @@ describe('weightedRandomInt', () => {
   });
 });
 
-
 describe('algoPicker(numMovies, numRecs)', () => {
   it('should return an array of length numPicks, with values between 0 and numMovies', () => {
     const { recs } = algoPicker(100, 10);
@@ -47,6 +45,14 @@ describe('algoPicker(numMovies, numRecs)', () => {
   it('When algoId = 1, small numbers should appear more frequently', () => {
     let { recs, algoIndex } = algoPicker(100, 100);
     while (algoIndex !== 1) {
+      ({ recs, algoIndex } = algoPicker(100, 100));
+    }
+    const avg = recs.reduce((acc, x) => acc + x) / recs.length;
+    expect(avg).to.be.below(50);
+  });
+  it('When algoId = 2, small numbers should appear more frequently', () => {
+    let { recs, algoIndex } = algoPicker(100, 100);
+    while (algoIndex !== 2) {
       ({ recs, algoIndex } = algoPicker(100, 100));
     }
     const avg = recs.reduce((acc, x) => acc + x) / recs.length;
