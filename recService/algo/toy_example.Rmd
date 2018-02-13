@@ -1,0 +1,96 @@
+---
+title: "Collaborative Filtering Matrices"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r echo=FALSE, results='hide', warning=FALSE, message=FALSE}
+library(dplyr)
+library(tidyr)
+library(lsa)
+library(purrrlyr)
+library(stringr)
+library(huxtable)
+library(knitr)
+library(kableExtra)
+
+# loads unique entries from history into working memory
+# currenty limiting # of movies.
+
+hist <- data.frame(user_id =c(0,0,0,0,0,0,0,1,1,1,2,2,2,2,2,2,3,3,4,4,4,5,5,5,5,5,5,5,6,6,7,7,7,8,8,8,8,9,9,9), movie_id =c(0,1,2,3,4,5,6,0,7,8,0,1,2,3,4,9,8,9,0,1,5,2,4,5,6,7,8,9,9,8,0,1,2,0,1,2,5,0,5,6),signal =c(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1))
+
+# convert to wide for matrix-ing
+users <- hist %>%
+  spread(movie_id, signal, fill = 0)
+
+# Get item-item cosine matrix
+rownames(users) <- users$user_id
+mat <- users %>%
+  select(-user_id) %>%
+  data.matrix() %>%
+  cosine()
+
+## function to compute every record.
+get_user_cosines <- function(user_row) {
+  user_id = getElement(user_row, 'user_id')
+  user_row = select(user_row, -user_id) %>% as.numeric
+  cos1 <- function(movie_vector) {
+    cosine(user_row, movie_vector)
+  }
+  c(user_id = user_id, apply(mat, FUN= cos1, MARGIN = 1))
+}
+
+## applies get_user_cosine to every user, and dplyr's it into tidy form
+model_cf <- by_row(users, get_user_cosines, .collate = "cols")
+
+# renames the new columns based on old movie_id, and and then renames the old columns
+colnames <- colnames(model_cf)
+len <- length(colnames)
+colnames[(len/2 + 2) : (len)] <- colnames[2 : (len/2)]
+colnames[2 : (len/2)] <- paste0('x', seq(2 : (len/2))) 
+colnames(model_cf) <- colnames
+
+# 2 (number of movies  + 1), user_id in column
+
+model_cf <- model_cf %>%
+  select(-starts_with('x'), -.out1)
+
+model_tidy <- model_cf %>%
+  gather(key = movie_id, value = score, -user_id) %>%
+  arrange(user_id, desc(score)) %>%
+  group_by(user_id) %>%
+  mutate(user_rank = row_number()) %>%
+  ungroup()
+
+```
+
+
+```{r echo=FALSE, results ='markdown'}
+hux(users, add_colnames = TRUE) %>%
+  set_all_borders(1) %>%
+  set_caption('movie_id') %>%
+  set_bold(1, everywhere, TRUE) %>%
+  set_background_color(everywhere, 4, 'gray') %>%
+  set_background_color(everywhere, 7, 'gray') %>%
+  set_background_color(3, everywhere, 'green') %>%
+  set_all_borders(3,4,4) %>%
+  set_all_border_colors(3,4,'gray') %>%
+  set_all_borders(3,7,4) %>%
+  set_all_border_colors(3,7,'gray')
+
+hux(mat, add_colnames = TRUE, add_rownames = TRUE) %>%
+  set_all_borders(1) %>%
+  set_background_color(4,7, 'gray') %>%
+  set_background_color(7,4, 'gray') %>%
+  set_background_color(5,everywhere, 'green')
+
+
+hux(model_cf, add_colnames = TRUE) %>%
+  set_all_borders(1) %>%
+  set_background_color(3,5, 'green')
+
+```
+
+
+
